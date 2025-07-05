@@ -13,9 +13,10 @@ import MenuItem from "@mui/material/MenuItem";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 
-const pages = ["Products"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const pages = ["Dashboard"];
+const settings = ["Logout"];
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = useState(0);
@@ -39,8 +40,9 @@ function Header() {
   return (
     <AppBar position="fixed">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar>
           {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
+
           <Box
             sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
           >
@@ -50,21 +52,30 @@ function Header() {
                 width: "40px",
               }}
             />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              sx={{
-                mr: 2,
-                fontFamily: "serif",
-                fontWeight: 700,
-                //   letterSpacing: ".3rem",
-                color: "inherit",
+            <NavLink
+              to="/"
+              style={{
                 textDecoration: "none",
+                color: "white",
+                display: { xs: "none", md: "flex" },
+                alignItems: "center",
               }}
             >
-              TaskFlow
-            </Typography>
+              <Typography
+                variant="h5"
+                noWrap
+                sx={{
+                  mr: 2,
+                  fontFamily: "serif",
+                  fontWeight: 700,
+                  //   letterSpacing: ".3rem",
+                  color: "inherit",
+                  textDecoration: "none",
+                }}
+              >
+                TaskFlow
+              </Typography>
+            </NavLink>
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -96,7 +107,9 @@ function Header() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+                  <Link to="/dashboard">
+                    <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
@@ -110,29 +123,44 @@ function Header() {
             }}
           >
             <PlaylistAddCheckIcon sx={{ height: "30px", width: "30px" }} />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              sx={{
-                fontFamily: "serif",
-                fontWeight: 700,
-                color: "inherit",
+            <NavLink
+              to="/"
+              style={{
                 textDecoration: "none",
+                color: "white",
               }}
             >
-              TaskFlow
-            </Typography>
+              <Typography
+                variant="h5"
+                noWrap
+                sx={{
+                  fontFamily: "serif",
+                  fontWeight: 700,
+                  color: "inherit",
+                  textDecoration: "none",
+                }}
+              >
+                TaskFlow
+              </Typography>
+            </NavLink>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+              <Link
+                to="/dashboard"
+                style={{
+                  textDecoration: "none",
+                  color: "white",
+                }}
               >
-                {page}
-              </Button>
+                <Button
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page}
+                </Button>
+              </Link>
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>

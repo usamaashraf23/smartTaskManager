@@ -44,14 +44,7 @@ function Home() {
         }}
       >
         <Box>
-          <Typography
-            variant="h3"
-            gutterBottom
-            noWrap={true}
-            sx={{
-              fontFamily: "sans-serif",
-            }}
-          >
+          <Typography variant="h3" gutterBottom>
             Organize Your Day with TaskFlow
           </Typography>
           <Typography variant="h6" color="text.secondary" paragraph>
