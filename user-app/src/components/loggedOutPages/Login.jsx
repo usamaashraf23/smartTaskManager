@@ -51,7 +51,7 @@ export default function Login() {
       }
 
       const result = await res.json();
-      localStorage.setItem("token", result.token); // Save token if needed
+      localStorage.setItem("token", result.token);
 
       setSnackbar({
         open: true,
