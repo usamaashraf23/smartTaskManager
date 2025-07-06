@@ -39,7 +39,7 @@ function Header() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // or sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
     navigate("/login");
   };
 
@@ -47,8 +47,6 @@ function Header() {
     <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar>
-          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
-
           <Box
             sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
           >
@@ -74,7 +72,6 @@ function Header() {
                   mr: 2,
                   fontFamily: "serif",
                   fontWeight: 700,
-                  //   letterSpacing: ".3rem",
                   color: "inherit",
                   textDecoration: "none",
                 }}
@@ -126,12 +123,11 @@ function Header() {
               ))}
             </Menu>
           </Box>
-          {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
           <Box
             sx={{
               display: { xs: "flex", md: "none" },
               alignItems: "center",
-              flexGrow: 1, // optional if you want space between logo & nav
+              flexGrow: 1,
             }}
           >
             <PlaylistAddCheckIcon sx={{ height: "30px", width: "30px" }} />
