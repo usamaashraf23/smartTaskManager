@@ -7,15 +7,26 @@ import {
   Paper,
   InputAdornment,
   IconButton,
+  Snackbar,
+  Alert as MuiAlert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function SignUp() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -24,11 +35,36 @@ export default function SignUp() {
 
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:3000/auth/signup", form);
-      navigate("/login");
+      const res = await fetch("http://localhost:3000/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (res.ok) {
+        setSnackbar({
+          open: true,
+          message: "Signup successful! Redirecting to login...",
+          severity: "success",
+        });
+        setTimeout(() => navigate("/login"), 2000);
+      } else {
+        const data = await res.json();
+        throw new Error(data.message || "Signup failed");
+      }
     } catch (err) {
-      alert("Signup failed. Please try again.");
+      setSnackbar({
+        open: true,
+        message: err.message || "Signup failed",
+        severity: "error",
+      });
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -43,22 +79,8 @@ export default function SignUp() {
         elevation={3}
         sx={{ p: 4, width: "100%", maxWidth: 400, borderRadius: 3 }}
       >
-        <Box
-          textAlign="center"
-          mb={3}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <PlaylistAddCheckIcon
-            sx={{
-              height: "45px",
-              width: "45px",
-              color: "blue",
-            }}
-          />
+        <Box textAlign="center" mb={3} display="flex" justifyContent="center">
+          <PlaylistAddCheckIcon sx={{ fontSize: 45, color: "blue", mr: 1 }} />
           <Typography variant="h4" fontWeight={700} color="blue">
             TaskFlow
           </Typography>
@@ -121,21 +143,12 @@ export default function SignUp() {
           variant="body2"
           align="center"
           mt={3}
-          sx={{
-            color: "#2D4F2B",
-            fontSize: "18px",
-          }}
+          sx={{ color: "#2D4F2B", fontSize: "18px" }}
         >
           Already have an account?{" "}
-          <NavLink
-            to="/login"
-            style={{
-              textDecoration: "none",
-            }}
-          >
+          <NavLink to="/login" style={{ textDecoration: "none" }}>
             <Button
               variant="text"
-              onClick={() => navigate("/login")}
               sx={{
                 textTransform: "none",
                 p: 0,
@@ -158,6 +171,17 @@ export default function SignUp() {
           © TaskFlow 2025. All rights reserved.
         </Typography>
       </Paper>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

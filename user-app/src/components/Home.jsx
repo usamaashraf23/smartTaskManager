@@ -36,6 +36,7 @@ function Home() {
       <Box
         sx={{
           py: 15,
+          px: 1,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",

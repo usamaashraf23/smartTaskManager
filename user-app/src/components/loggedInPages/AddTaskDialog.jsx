@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -12,23 +12,46 @@ import {
 } from "@mui/material";
 import { Close, CalendarToday, Category } from "@mui/icons-material";
 
-export default function AddTaskDialog({ open, onClose, onAdd }) {
-  const [form, setForm] = useState({ title: "", category: "", deadline: "" });
+export default function AddTaskDialog({
+  open,
+  onClose,
+  onAdd,
+  initialData = null,
+}) {
+  const [form, setForm] = useState({
+    title: "",
+    category: "",
+    date: "",
+  });
+
+  // ✅ Update form when initialData changes (i.e., for editing)
+  useEffect(() => {
+    if (initialData) {
+      setForm(initialData);
+    } else {
+      setForm({ title: "", category: "", date: "" });
+    }
+  }, [initialData, open]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleAddTask = () => {
+  const handleSubmit = () => {
+    if (!form.title || !form.category || !form.date) {
+      alert("All fields are required!");
+      return;
+    }
+
     onAdd(form);
-    setForm({ title: "", category: "", deadline: "" });
+    setForm({ title: "", category: "", date: "" });
     onClose();
   };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>
-        Add New Task
+        {initialData ? "Edit Task" : "Add New Task"}
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -62,10 +85,10 @@ export default function AddTaskDialog({ open, onClose, onAdd }) {
           />
           <TextField
             label="Deadline"
-            name="deadline"
+            name="date"
             type="date"
             fullWidth
-            value={form.deadline}
+            value={form.date}
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             InputProps={{
@@ -82,8 +105,8 @@ export default function AddTaskDialog({ open, onClose, onAdd }) {
         <Button onClick={onClose} color="inherit">
           Cancel
         </Button>
-        <Button variant="contained" onClick={handleAddTask}>
-          Add Task
+        <Button variant="contained" onClick={handleSubmit}>
+          {initialData ? "Update Task" : "Add Task"}
         </Button>
       </DialogActions>
     </Dialog>

@@ -13,7 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
 
 const pages = ["Dashboard"];
 const settings = ["Logout"];
@@ -21,6 +21,7 @@ const settings = ["Logout"];
 function Header() {
   const [anchorElNav, setAnchorElNav] = useState(0);
   const [anchorElUser, setAnchorElUser] = useState(0);
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -35,6 +36,11 @@ function Header() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // or sessionStorage.removeItem("token");
+    navigate("/login");
   };
 
   return (
@@ -107,9 +113,15 @@ function Header() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to="/dashboard">
+                  <NavLink
+                    to="/dashboard"
+                    style={{
+                      textDecoration: "none",
+                      color: "black",
+                    }}
+                  >
                     <Typography sx={{ textAlign: "center" }}>{page}</Typography>
-                  </Link>
+                  </NavLink>
                 </MenuItem>
               ))}
             </Menu>
@@ -146,7 +158,7 @@ function Header() {
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Link
+              <NavLink
                 to="/dashboard"
                 style={{
                   textDecoration: "none",
@@ -160,38 +172,29 @@ function Header() {
                 >
                   {page}
                 </Button>
-              </Link>
+              </NavLink>
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="User menu">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="User" />
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
               anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
+              sx={{ mt: "45px" }}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
+              <MenuItem
+                onClick={() => {
+                  handleCloseUserMenu();
+                  handleLogout();
+                }}
+              >
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

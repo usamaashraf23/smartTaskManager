@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TasksModule } from './modules/task.module';
+import { UserModule } from './modules/user.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { TasksModule } from './modules/task.module';
       inject: [ConfigService],
     }),
     TasksModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

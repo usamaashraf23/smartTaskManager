@@ -15,7 +15,7 @@ export class Task {
   date: string; // or Date if needed
 
   @Prop({ default: false })
-  isCompleted: boolean;
+  completed: boolean;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
