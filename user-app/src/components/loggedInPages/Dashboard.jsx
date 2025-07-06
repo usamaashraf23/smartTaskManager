@@ -151,6 +151,23 @@ function Dashboard() {
     setFilteredTasks(filtered);
   }, [allTasks, statusFilter, categoryFilter]);
 
+  useEffect(() => {
+    const now = new Date();
+    const next24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+    const upcomingTasks = allTasks.filter((task) => {
+      const deadline = new Date(task.deadline);
+      return deadline > now && deadline < next24Hours;
+    });
+
+    if (upcomingTasks.length > 0) {
+      showSnackbar(
+        `You have ${upcomingTasks.length} task(s) due within 24 hours.`,
+        "warning"
+      );
+    }
+  }, [allTasks]);
+
   return (
     <section style={{ backgroundColor: "#F8F8F8", minHeight: "100vh" }}>
       <Box sx={{ marginTop: "60px" }}>

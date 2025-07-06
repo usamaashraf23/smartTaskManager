@@ -23,6 +23,10 @@ export class AuthController {
   ) {
     const { name, email, password } = body;
 
+    if (!email || !password || !name) {
+      throw new BadRequestException('Name, email, and password are required');
+    }
+
     const existingUser = await this.userService.findByEmail(email);
     if (existingUser) {
       throw new BadRequestException('Email already in use');

@@ -34,6 +34,15 @@ export default function SignUp() {
   };
 
   const handleSubmit = async () => {
+    if (!form.name || !form.email || !form.password) {
+      setSnackbar({
+        open: true,
+        message: "All fields are required.",
+        severity: "error",
+      });
+      return;
+    }
+
     try {
       const res = await fetch("http://localhost:3000/auth/signup", {
         method: "POST",
@@ -88,6 +97,7 @@ export default function SignUp() {
 
         <TextField
           fullWidth
+          type="email"
           label="Name"
           name="name"
           margin="normal"
@@ -97,6 +107,7 @@ export default function SignUp() {
         <TextField
           fullWidth
           label="Email"
+          type="email"
           name="email"
           margin="normal"
           value={form.email}
